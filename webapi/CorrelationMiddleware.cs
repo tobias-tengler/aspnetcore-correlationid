@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 public class CorrelationMiddleware
 {
@@ -31,7 +32,8 @@ public class CorrelationMiddleware
         context.Items["CorrelationId"] = correlationId;
 
         // add it as a variable to our logger, so it shows up in all logs that happen during this request
-        using (logger.BeginScope("{@CorrelationId}", correlationId))
+        // todo: this is Serilog specific code, find more generic solution
+        using (LogContext.PushProperty("CorrelationId", correlationId))
         {
             return _next(context);
         }
