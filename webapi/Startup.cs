@@ -25,6 +25,9 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        // add our middleware to the request pipeline
+        app.UseMiddleware<CorrelationMiddleware>();
+
         app.UseHttpsRedirection();
 
         app.UseRouting();
